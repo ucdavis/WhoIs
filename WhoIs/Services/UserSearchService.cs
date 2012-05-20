@@ -31,6 +31,8 @@ namespace WhoIs.Services
 
             IndexWriter indexWriter = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.UNLIMITED);
 
+            indexWriter.DeleteAll();
+
             foreach (User u in users)
             {
                 indexWriter.AddDocument(u.GetDocument());
