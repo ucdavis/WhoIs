@@ -4,6 +4,7 @@ using UCDArch.Core.DataAnnotationsValidator.CommonValidatorAdapter;
 using UCDArch.Core.PersistanceSupport;
 using UCDArch.Data.NHibernate;
 using Castle.MicroKernel.Registration;
+using WhoIs.Services;
 
 namespace WhoIs
 {
@@ -12,6 +13,8 @@ namespace WhoIs
         public static void AddComponentsTo(IWindsorContainer container)
         {
             AddGenericRepositoriesTo(container);
+            
+            container.Register(Component.For<IUserSearchService>().ImplementedBy<UserSearchService>().Named("usersearch"));
 
             container.Register(Component.For<IValidator>().ImplementedBy<Validator>().Named("validator"));
             container.Register(Component.For<IDbContext>().ImplementedBy<DbContext>().Named("dbContext"));

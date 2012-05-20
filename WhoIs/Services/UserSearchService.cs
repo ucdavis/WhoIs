@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
@@ -9,7 +7,6 @@ using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
-using UCDArch.Core.PersistanceSupport;
 using WhoIs.Models;
 
 namespace WhoIs.Services
@@ -17,17 +14,11 @@ namespace WhoIs.Services
     public interface IUserSearchService
     {
         void BuildIndex(List<User> users);
+        List<User> Search(string field, string q);
     }
 
     public class UserSearchService : IUserSearchService
     {
-        private readonly IRepositoryWithTypedId<User, Guid> _userRepository;
-
-        public UserSearchService(IRepositoryWithTypedId<User,Guid> userRepository)
-        {
-            _userRepository = userRepository;
-        }
-
         private static readonly string AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         
         public void BuildIndex(List<User> users)
@@ -65,26 +56,23 @@ namespace WhoIs.Services
 
             searcher.Search(query, collector);
 
-            ScoreDoc[] hits = collector.TopDocs().scoreDocs;
+            ScoreDoc[] hits = collector.TopDocs().ScoreDocs;
 
-            var userIds = new List<Guid>();
-
+            var users = new List<User>();
+            
             foreach (ScoreDoc scoreDoc in hits)
             {
                 //Get the document that represents the search result.
                 Document document = searcher.Doc(scoreDoc.doc);
 
-                Guid id = Guid.Parse(document.Get("Id"));
-
-                //The same document can be returned multiple times within the search results.
-                if (!userIds.Contains(id))
-                {
-                    userIds.Add(id);
-                }
+                users.Add(new User
+                              {
+                                  FirstName = document.Get("FirstName"),
+                                  LastName = document.Get("LastName"),
+                                  Email = document.Get("Email"),
+                                  LoginId = document.Get("LoginId")
+                              });
             }
-
-            //Now that we have the product Ids representing our search results, retrieve the products from the database.
-            List<User> users = _userRepository.Queryable.Where(x => userIds.Contains(x.Id)).ToList();
 
             reader.Close();
             searcher.Close();

@@ -13,7 +13,7 @@ namespace WhoIs.Models
         public virtual string Email { get; set; }
         public virtual string LoginId { get; set; }
         
-        public Document GetDocument()
+        public virtual Document GetDocument()
         {
             var document = new Document();
             document.Add(new Field("FirstName", FirstName, Field.Store.YES, Field.Index.ANALYZED));
