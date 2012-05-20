@@ -57,8 +57,14 @@
     <Reference Include="HibernatingRhinos.Profiler.Appender.v4.0">
       <HintPath>..\packages\NHibernateProfiler.1.0.0.937\lib\Net40\HibernatingRhinos.Profiler.Appender.v4.0.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
@@ -120,6 +126,8 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ISearchDocument.cs" />
+    <Compile Include="Services\SearchService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Readme\Elmah.txt" />
