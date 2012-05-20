@@ -14,7 +14,7 @@ namespace WhoIs.Services
     public interface IUserSearchService
     {
         void BuildIndex(List<User> users);
-        List<User> Search(string field, string q);
+        List<User> Search(string q);
     }
 
     public class UserSearchService : IUserSearchService
@@ -38,7 +38,7 @@ namespace WhoIs.Services
             indexWriter.Close();
         }
 
-        public List<User> Search(string field, string q)
+        public List<User> Search(string q)
         {
             FSDirectory directory = FSDirectory.Open(new System.IO.DirectoryInfo(AppData));
 
@@ -48,7 +48,9 @@ namespace WhoIs.Services
 
             Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_29);
 
-            QueryParser parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, field, analyzer);
+            var searchFields = new[] {"FirstName", "LastName", "Email", "LoginId"};
+            
+            var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_29, searchFields, analyzer);
 
             Query query = parser.Parse(q);
 

@@ -38,7 +38,7 @@ namespace WhoIs.Controllers
 
         public ActionResult Search(string id)
         {
-            var results =  _userSearchService.Search("FirstName", id);
+            var results =  _userSearchService.Search(id);
 
             return View(results);
         }
