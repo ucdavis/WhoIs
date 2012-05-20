@@ -127,7 +127,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ISearchDocument.cs" />
-    <Compile Include="Services\SearchService.cs" />
+    <Compile Include="Services\UserSearchService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Readme\Elmah.txt" />
