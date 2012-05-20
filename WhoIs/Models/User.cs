@@ -10,14 +10,15 @@ namespace WhoIs.Models
     {
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
+        public virtual string FullName { get; set; }
         public virtual string Email { get; set; }
         public virtual string LoginId { get; set; }
         
         public virtual Document GetDocument()
         {
             var document = new Document();
-            document.Add(new Field("FirstName", FirstName, Field.Store.YES, Field.Index.ANALYZED));
-            document.Add(new Field("LastName", LastName, Field.Store.YES, Field.Index.ANALYZED));
+            document.Add(new Field("FullName", string.Format("{0} {1}", FirstName, LastName), Field.Store.YES,
+                                   Field.Index.ANALYZED));
             document.Add(new Field("Email", Email, Field.Store.YES, Field.Index.ANALYZED));
             document.Add(new Field("LoginId", LoginId, Field.Store.YES, Field.Index.ANALYZED));
             //document.Add(new Field("Id", Id, Field.Store.NO, Field.Index.NO));

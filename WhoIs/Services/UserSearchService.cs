@@ -8,6 +8,8 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
 using WhoIs.Models;
+using System.IO;
+using System.Web;
 
 namespace WhoIs.Services
 {
@@ -19,7 +21,7 @@ namespace WhoIs.Services
 
     public class UserSearchService : IUserSearchService
     {
-        private static readonly string AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        private static readonly string AppData = Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data"), "Lucene");
         
         public void BuildIndex(List<User> users)
         {
@@ -46,9 +48,10 @@ namespace WhoIs.Services
 
             Searcher searcher = new IndexSearcher(reader);
 
+            //var analyzer = new KeywordAnalyzer();
             Analyzer analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_29);
 
-            var searchFields = new[] {"FirstName", "LastName", "Email", "LoginId"};
+            var searchFields = new[] {"FullName", "Email", "LoginId"};
             
             var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_29, searchFields, analyzer);
 
@@ -69,8 +72,7 @@ namespace WhoIs.Services
 
                 users.Add(new User
                               {
-                                  FirstName = document.Get("FirstName"),
-                                  LastName = document.Get("LastName"),
+                                  FullName = document.Get("FullName"),
                                   Email = document.Get("Email"),
                                   LoginId = document.Get("LoginId")
                               });
